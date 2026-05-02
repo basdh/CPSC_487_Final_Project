@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interactive SE(3) Robot Arm</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #0b1220;
+      }
+      #app {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        min-height: 100vh;
+      }
+      #file-protocol-warning {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0;
+        right: 0;
+        top: 0;
+        padding: 14px 20px;
+        background: #450a0a;
+        color: #fecaca;
+        font: 14px/1.45 system-ui, sans-serif;
+        text-align: center;
+        border-bottom: 1px solid #7f1d1d;
+      }
+      #file-protocol-warning code {
+        background: rgba(0, 0, 0, 0.25);
+        padding: 2px 8px;
+        border-radius: 4px;
+      }
+      #model-status {
+        position: fixed;
+        z-index: 9998;
+        right: 12px;
+        bottom: 12px;
+        max-width: min(420px, 92vw);
+        padding: 10px 14px;
+        background: rgba(15, 23, 42, 0.85);
+        color: #cbd5e1;
+        font: 12px/1.45 system-ui, sans-serif;
+        border-radius: 8px;
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        pointer-events: none;
+      }
+      #axes-legend {
+        position: fixed;
+        z-index: 9998;
+        left: 12px;
+        bottom: 12px;
+        padding: 12px 16px;
+        background: rgba(15, 23, 42, 0.85);
+        color: #94a3b8;
+        font: 13px/1.45 system-ui, sans-serif;
+        border-radius: 8px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        pointer-events: none;
+        max-width: min(560px, 92vw);
+      }
+      #axes-legend span {
+        font-weight: 600;
+      }
+      #axes-legend .r {
+        color: #ef4444;
+      }
+      #axes-legend .g {
+        color: #22c55e;
+      }
+      #axes-legend .b {
+        color: #3b82f6;
+      }
+      #game-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 10001;
+        pointer-events: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 20px;
+      }
+      .game-hud-panel {
+        background: rgba(15, 23, 42, 0.88);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        border-radius: 10px;
+        padding: 14px 20px;
+        max-width: min(520px, 92vw);
+        color: #e2e8f0;
+        font: 14px/1.5 system-ui, Segoe UI, sans-serif;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      }
+      .game-hud-title {
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin-bottom: 6px;
+        color: #f8fafc;
+      }
+      .game-hud-level {
+        margin-bottom: 8px;
+        color: #94a3b8;
+      }
+      .game-hud-body {
+        margin: 0 0 10px 0;
+      }
+      .game-hud-keys {
+        margin: 0;
+        font-size: 12px;
+        color: #94a3b8;
+      }
+      .game-hud-keys kbd {
+        background: #334155;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-size: 11px;
+      }
+      #app canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        vertical-align: middle;
+        touch-action: none;
+      }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="file-protocol-warning"></div>
+    <div id="app"></div>
+    <div id="game-overlay">
+      <div id="game-hud" class="game-hud-panel"></div>
+    </div>
+    <div id="axes-legend">
+      World: <span class="r">X</span> red · <span class="g">Y</span> green · <span class="b">Z</span> blue · orbit: drag / scroll ·
+      plane: <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> · height: <kbd>W</kbd>/<kbd>S</kbd>
+    </div>
+    <div id="model-status">Starting…</div>
+    <script>
+      if (location.protocol === 'file:') {
+        var w = document.getElementById('file-protocol-warning');
+        w.style.display = 'block';
+        w.innerHTML =
+          'Load this page over HTTP (not file://). Run <code>python3 -m http.server 8080</code> in the project folder, then open <code>http://localhost:8080</code>';
+      }
+    </script>
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>
